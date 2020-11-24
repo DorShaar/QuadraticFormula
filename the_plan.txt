@@ -1,0 +1,19 @@
+In that repository I'm going to solve as many quadratic formulas I can in the fastet time I can.
+I'm going to do that in a pretty odd way, to make myself learn and use the next techs:
+
+1. queues (activemq)
+2. cache (redis)
+3. fast serialization. Will start with regular, json serializaion, and improve to Google's
+Protobug.
+4. Few micro services, in different languages. I think it will be C#, Java, python, go and
+maybe javascript. Each service will do something different that is in charge of the flow
+of the calculations.
+5. Benchmarks. I am going to measure myself in each of the parts of that application. That way
+I can observe how each of improvement is making a difference.
+
+Main flow:
+1. Read the quadratic Equations from some csv allong side their pre calculated solutions. 
+Send them to the applicaion flow, and compare the results with the pre calculated solution.
+(Bonus: read those equations from a paper AI).
+
+2. 
