@@ -1,18 +1,27 @@
 import csv
 import jsonpickle
-from setup_logger import logger
-from QueueMessage import QueueMessage
+from . import setup_logger
+from . import QueueMessage
+
+logger = setup_logger.logger
+QueueMessage = QueueMessage.QueueMessage
 
 class EquationsReader:
     def __init__(self, csv_path):
         self.csv_path = csv_path
 
-    def print_queue_messages(self):
+    def get_queue_messages(self):
         possible_equations = get_csv_lines(self.csv_path)
         equations = filter_valid_equations(possible_equations)
+        queueMessages = []
 
         for eq in equations:
-            logger.info(create_json_queue_message(eq))
+            queueMessages.append(create_json_queue_message(eq))
+
+        return queueMessages
+    
+    def send_queue_message(self, queue_message):
+        logger.info(queue_message)
 
 # Get list of equations being read from a given csv.
 def get_csv_lines(csv_path):
