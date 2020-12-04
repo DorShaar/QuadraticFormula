@@ -24,4 +24,5 @@ Python:
       V 3. use logger.
 	4. Add time measurement.
 	5. For next phase - reduce iterations.
-        6. use yield return on foreachs before send.
+    6. use yield return on foreachs before send.
+	
