@@ -10,7 +10,7 @@ public class Main
         ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 
         EquationArranger equationArranger = (EquationArranger) context.getBean("equationArranger");
-        ArrangeResult arrangeResult = equationArranger.arrange(args[0]);
+        ArrangeResult arrangeResult = equationArranger.arrange("3x^2 + 6x -5 = 0");
 
         if (arrangeResult.isArrangeSucceeded())
             System.out.println(arrangeResult.arrangedEquation());
