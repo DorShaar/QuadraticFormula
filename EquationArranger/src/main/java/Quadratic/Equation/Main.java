@@ -1,5 +1,6 @@
 package Quadratic.Equation;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -7,6 +8,8 @@ public class Main
 {
     public static void main(String[] args)
     {
+        PropertyConfigurator.configure("log4j.properties");
+
         ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 
         EquationArranger equationArranger = (EquationArranger) context.getBean("equationArranger");
