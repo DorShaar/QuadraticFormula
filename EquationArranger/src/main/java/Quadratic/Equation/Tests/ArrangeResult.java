@@ -1,4 +1,4 @@
-package Quadratic.Equation;
+package Quadratic.Equation.Tests;
 
 import java.util.List;
 import java.util.Vector;

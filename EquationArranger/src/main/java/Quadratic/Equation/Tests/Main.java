@@ -1,4 +1,4 @@
-package Quadratic.Equation;
+package Quadratic.Equation.Tests;
 
 public class Main
 {

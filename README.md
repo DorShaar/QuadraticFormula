@@ -6,3 +6,8 @@ Python:
 1. Logging.
 2. Main function.
 3. json serialization with jsonpickle.
+
+Java:
+1. Maven.
+2. Junit5 with Parameter Test.
+3. Cusotm exception.

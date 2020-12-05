@@ -1,5 +1,5 @@
-import Quadratic.Equation.ArrangeResult;
-import Quadratic.Equation.EquationArranger;
+package Quadratic.Equation.Tests;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -19,9 +19,9 @@ public class EquationArrangerTests
     public void arrange_ValidEquations_ArrangedAsExpected(String input,
                                                           String expected)
     {
-        EquationArranger tester = new EquationArranger();
+        EquationArranger equationArranger = new EquationArranger();
 
-        ArrangeResult arrangeResult = tester.arrange(input);
+        ArrangeResult arrangeResult = equationArranger.arrange(input);
         assertTrue(arrangeResult.isArrangeSucceeded());
         assertEquals(expected, arrangeResult.arrangedEquation());
     }
@@ -30,9 +30,9 @@ public class EquationArrangerTests
     @ValueSource(strings = {"abc", "y ^ 2 + x  = 1", "x^3 + x^2 + 1 = 1"})
     public void arrange_InvalidEquations_ArrangedAsExpected(String input)
     {
-        EquationArranger tester = new EquationArranger();
+        EquationArranger equationArranger = new EquationArranger();
 
-        ArrangeResult arrangeResult = tester.arrange(input);
+        ArrangeResult arrangeResult = equationArranger.arrange(input);
         assertFalse(arrangeResult.isArrangeSucceeded());
     }
 }
