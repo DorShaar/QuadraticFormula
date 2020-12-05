@@ -1,4 +1,4 @@
-package Quadratic.Equation.Tests.Scanner;
+package Quadratic.Equation.Scanner;
 
 import java.util.ArrayList;
 import java.util.List;

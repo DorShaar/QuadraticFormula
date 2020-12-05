@@ -1,4 +1,4 @@
-package Quadratic.Equation.Tests.Scanner;
+package Quadratic.Equation.Scanner;
 
 public class EquationScanException extends Exception
 {

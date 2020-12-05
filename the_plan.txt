@@ -27,7 +27,7 @@ Python:
     6. use yield return on foreachs before send.
 	
 Java:
-	1. Use Class Injection and add it to Readme.
+	1. Use Class Injection and add it to Readme (with spring beans).
 	2. Send message to the next application from the Java application.
   V 3. UTs.
     4. use logger.

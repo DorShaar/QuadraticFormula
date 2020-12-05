@@ -1,4 +1,4 @@
-package Quadratic.Equation.Tests;
+package Quadratic.Equation;
 
 import java.util.List;
 import java.util.Vector;
@@ -63,5 +63,18 @@ public class ArrangeResult
     public Boolean isArrangeSucceeded()
     {
         return isArrangeSucceeded;
+    }
+
+    public String getErrorsAndWarnings()
+    {
+        StringBuilder errors = new StringBuilder();
+
+        for(String note : notes)
+        {
+            errors.append(note);
+            errors.append(", ");
+        }
+
+        return errors.toString();
     }
 }

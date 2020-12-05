@@ -1,7 +1,7 @@
 package Scanner.Tests;
 
-import Quadratic.Equation.Tests.Scanner.EquationScanException;
-import Quadratic.Equation.Tests.Scanner.EquationScanner;
+import Quadratic.Equation.Scanner.EquationScanException;
+import Quadratic.Equation.Scanner.EquationScanner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

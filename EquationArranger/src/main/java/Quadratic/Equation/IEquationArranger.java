@@ -1,4 +1,4 @@
-package Quadratic.Equation.Tests;
+package Quadratic.Equation;
 
 public interface IEquationArranger
 {
