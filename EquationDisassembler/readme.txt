@@ -1,5 +1,5 @@
-to be able and run UT, we should install jest with yarn:
-	yarn add --dev jest
+to be able and run UT, we should install mocha with yarn:
+	yarn add mocha
 
 to run it:
 	yarn test
