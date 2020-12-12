@@ -313,7 +313,10 @@ public class EquationScanner
     {
         int number = CreateNumberFromCharactersGroupAndCoefficientSign();
         if (isAfterEqualSign)
+        {
             secondDegreeCoefficientsOnRight.add(number);
+            return;
+        }
 
         secondDegreeCoefficientsOnLeft.add(number);
     }
@@ -322,7 +325,10 @@ public class EquationScanner
     {
         int number = CreateNumberFromCharactersGroupAndCoefficientSign();
         if (isAfterEqualSign)
+        {
             firstDegreeCoefficientsOnRight.add(number);
+            return;
+        }
 
         firstDegreeCoefficientsOnLeft.add(number);
     }
@@ -331,7 +337,10 @@ public class EquationScanner
     {
         int number = CreateNumberFromCharactersGroupAndCoefficientSign();
         if (isAfterEqualSign)
+        {
             freeNumbersOnRight.add(number);
+            return;
+        }
 
         freeNumbersOnLeft.add(number);
     }

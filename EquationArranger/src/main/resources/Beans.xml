@@ -6,7 +6,7 @@
    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Definition for equationArranger bean -->
-    <bean id = "equationArranger" class = "Quadratic.Equation.EquationArranger">
+    <bean id = "equationArranger" class = "Quadratic.Equation.Arranger.EquationArranger">
         <constructor-arg ref = "equationScanner"/>
     </bean>
 

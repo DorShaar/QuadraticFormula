@@ -1,4 +1,4 @@
-package Quadratic.Equation;
+package Quadratic.Equation.Arranger;
 
 import java.util.List;
 import java.util.Vector;
@@ -58,6 +58,11 @@ public class ArrangeResult
     public String arrangedEquation()
     {
         return arrangedEquation;
+    }
+
+    public String originalEquation()
+    {
+        return originalEquation;
     }
 
     public Boolean isArrangeSucceeded()
