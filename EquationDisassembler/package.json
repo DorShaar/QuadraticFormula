@@ -1,0 +1,15 @@
+{
+  "name": "equation-disassembler",
+  "version": "1.0.0",
+  "description": "disassemble equation to it's coefficients",
+  "main": "index.js",
+  "author": "Dor Shaar",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  }
+}

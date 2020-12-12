@@ -1,3 +1,6 @@
 for python:
 	pip
 	jsonpickle
+
+for javasript:
+	yarn
