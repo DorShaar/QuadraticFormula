@@ -1,8 +1,25 @@
 import {EquationCoefficients} from "./EquationCoefficients.js"
+import winston from 'winston';
+import {format} from 'logform';
+
+const logger = winston.createLogger({
+  level: 'debug',
+  format: format.combine(
+    format.timestamp(),
+    format.json()
+    ),
+  defaultMeta: { service: 'disassembler-service' },
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'logs/disassembler.log', timestamp: true })
+  ],
+});
 
 // Get variable x and equation in the expected form of Ax+Bx+c=0.
 // Extracts the coefficients A, b anc C.
 export function disassamble(equation, variable) {
+    logger.log("info", "Start disassemble equation " + equation);
+
     var aResult = findA(equation, variable);
     aResult.secondDegreeIndex += 3; // + size of "x^2"
 
@@ -11,7 +28,7 @@ export function disassamble(equation, variable) {
 
     const c = findC(equation, bResult.firstDegreeIndex);
 
-    console.log("The coefficients of " + equation + " are: " + aResult.a + ", " + bResult.b + ", " + c);
+    logger.log("info", "The coefficients of " + equation + " are: " + aResult.a + ", " + bResult.b + ", " + c);
     return new EquationCoefficients(equation, aResult.a, bResult.b, c);
 }
 
@@ -22,15 +39,22 @@ function findA(equation, variable) {
     if (secondDegreeIndex == -1)
         throw new SyntaxError("Could not find second degree variable");
 
-    console.log("Index of " + secondDegreeVariable + ": " + secondDegreeIndex);
+    logger.log("debug", "Index of " + secondDegreeVariable + ": " + secondDegreeIndex);
 
-    let a = equation.substring(0, secondDegreeIndex);
-    if (a[0] == '+')
-        a = a.substring(1);
-    else if (a[0] != '-' && isNaN(a[0]))
-        throw new SyntaxError("Expecting '+' or '-' signs only");
+    let a = "1";
+    if (secondDegreeIndex != 0)
+    {
+        a = equation.substring(0, secondDegreeIndex);
+        if (a[0] == '+')
+            a = a.substring(1);
+        else if (a[0] != '-' && isNaN(a[0]))
+            throw new SyntaxError("Expecting '+' or '-' signs only");
 
-    console.log("A: " + a);
+        if (a == "-")
+            a = "-1";
+    }
+
+    logger.log("debug", "A: " + a);
 
     return {
         a: a, 
@@ -44,7 +68,7 @@ function findB(equation, variable, secondDegreeEndIndex) {
     if (firstDegreeIndex == -1)
         throw new SyntaxError("Could not find first degree variable");
 
-    console.log("Index of " + variable + ": " + firstDegreeIndex);
+    logger.log("debug", "Index of " + variable + ": " + firstDegreeIndex);
 
     let b = equation.substring(secondDegreeEndIndex, firstDegreeIndex);
     if (b[0] == '+')
@@ -52,7 +76,10 @@ function findB(equation, variable, secondDegreeEndIndex) {
     else if (b[0] != '-')
         throw new SyntaxError("Expecting '+' or '-' signs only");
 
-    console.log("B: " + b);
+    if (b == "")
+        b = "1";
+
+    logger.log("debug", "B: " + b);
 
     return {
         b: b, 
@@ -70,7 +97,7 @@ function findC(equation, firstDegreeEndIndex) {
     if(c[0] == '+')
         c = c.substring(1);
 
-    console.log("C: " + c);
+    logger.log("debug", "C: " + c);
     return c;
 }
 
