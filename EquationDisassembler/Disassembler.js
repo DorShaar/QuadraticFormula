@@ -1,4 +1,4 @@
-import {EquationCoefficients} from "./EquationCoefficients.js"
+import {DisassembledEquationMessage} from "./DisassembledEquationMessage.js"
 import winston from 'winston';
 import {format} from 'logform';
 
@@ -20,6 +20,8 @@ const logger = winston.createLogger({
 export function disassamble(equation, variable) {
     logger.log("info", "Start disassemble equation " + equation);
 
+    const startTime = Date.now();
+
     var aResult = findA(equation, variable);
     aResult.secondDegreeIndex += 3; // + size of "x^2"
 
@@ -28,8 +30,10 @@ export function disassamble(equation, variable) {
 
     const c = findC(equation, bResult.firstDegreeIndex);
 
+    const endTime = Date.now();
+
     logger.log("info", "The coefficients of " + equation + " are: " + aResult.a + ", " + bResult.b + ", " + c);
-    return new EquationCoefficients(equation, aResult.a, bResult.b, c);
+    return new DisassembledEquationMessage(equation, aResult.a, bResult.b, c, startTime, endTime);
 }
 
 function findA(equation, variable) {
@@ -101,6 +105,7 @@ function findC(equation, firstDegreeEndIndex) {
     return c;
 }
 
-function createMessage() {
- // TODO use json
+export function createMessage(equationCoefficients) {
+    const jsonMessage = JSON.stringify(equationCoefficients)
+    logger.log("info", jsonMessage);
 }

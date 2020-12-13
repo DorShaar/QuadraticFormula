@@ -36,6 +36,13 @@ Java:
 
 Javascript:
     1. Send message to the next application from the Javascript application.
+  V 2. UTs.
+  V 3. Use logger.
+  V 4. Add time measurement.
+
+C#:
+    1. Send message to the next application from the C# application.
     2. UTs.
     3. Use logger.
     4. Add time measurement.
+    5. Use redis.
