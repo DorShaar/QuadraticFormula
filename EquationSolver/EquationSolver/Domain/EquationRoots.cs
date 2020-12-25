@@ -26,5 +26,16 @@ namespace EquationSolver.Domain
                 HasResult = false
             };
         }
+
+        public override string ToString()
+        {
+            if (!HasResult)
+                return "No Roots";
+
+            if (Root1 == Root2)
+                return $"({Root1})";
+
+            return $"({Root1}, {Root2})";
+        }
     }
 }

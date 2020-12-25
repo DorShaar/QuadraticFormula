@@ -42,7 +42,11 @@ Javascript:
 
 C#:
     1. Send message to the next application from the C# application.
-    2. UTs.
-    3. Use logger.
+  V 2. UTs.
+  V 3. Use logger.
     4. Add time measurement.
-    5. Use redis.
+    5. Use redis (write it in the readme).
+    6. Use Polly (write it in the readme).
+
+General:
+Scan all repos and mark time wasting methods, and measure them, also should write them in report.

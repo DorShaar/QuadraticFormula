@@ -14,9 +14,13 @@ namespace EquationSolver.Infra
             mLogger = logger;
         }
 
-        public EquationRoots Solve(int a, int b, int c)
+        public EquationRoots Solve(Coefficients coefficients)
         {
-            Coefficients coefficients = new Coefficients(a, b, c);
+            int a = coefficients.A;
+            int b = coefficients.B;
+            int c = coefficients.C;
+
+            mLogger.LogDebug($"Calcualting roots for coefficient a: {a}, b: {b} and c: {c}");
 
             if (a == 0)
             {

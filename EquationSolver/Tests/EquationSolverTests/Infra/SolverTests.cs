@@ -3,7 +3,7 @@ using EquationSolver.Infra;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
-namespace EquationSolverTests
+namespace Infra.EquationSolverTests
 {
     public class SolverTests
     {
@@ -12,7 +12,7 @@ namespace EquationSolverTests
         public void Solve_EquationWithRoots_RootsAreCorrect(int a, int b, int c, double x1, double x2)
         {
             Solver solver = new Solver(NullLogger<Solver>.Instance);
-            EquationRoots equationRoots = solver.Solve(a, b, c);
+            EquationRoots equationRoots = solver.Solve(new Coefficients(a, b, c));
 
             Assert.True(equationRoots.HasResult);
             Assert.Equal(x1, equationRoots.Root1);
