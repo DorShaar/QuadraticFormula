@@ -12,3 +12,7 @@ Java:
 2. Junit5 with Parameter Test.
 3. Custom exception.
 4. Dependency Injection using Spring and Beans.
+
+C#:
+1. Use Polly for retry mechanism.
+2. Use Redis for caching.

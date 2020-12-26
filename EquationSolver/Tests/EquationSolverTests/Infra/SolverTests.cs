@@ -50,5 +50,15 @@ namespace EquationSolverTests.Infra
 
             Assert.False(equationRoots.HasResult);
         }
+
+        [Theory]
+        [InlineData(2, 4, -6)]
+        public void GetMeasurement_AsExpected(int a, int b, int c)
+        {
+            Solver solver = new Solver(NullLogger<Solver>.Instance);
+            solver.Solve(new Coefficients(a, b, c));
+
+            Assert.InRange(solver.GetMeasurement(), 1, 100);
+        }
     }
 }

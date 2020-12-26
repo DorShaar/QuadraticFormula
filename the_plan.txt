@@ -44,9 +44,12 @@ C#:
     1. Send message to the next application from the C# application.
   V 2. UTs.
   V 3. Use logger.
-    4. Add time measurement.
-    5. Use redis (write it in the readme).
-    6. Use Polly (write it in the readme).
+  V 4. Add time measurement.
+  V 5. Use redis (write it in the readme).
+  V 6. Use Polly (write it in the readme).
+  
+Go:
+	1. 
 
 General:
 Scan all repos and mark time wasting methods, and measure them, also should write them in report.

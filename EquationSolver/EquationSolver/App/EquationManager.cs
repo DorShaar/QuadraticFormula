@@ -2,6 +2,7 @@
 using EquationSolver.Infra;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,19 +24,27 @@ namespace EquationSolver.App
             mLogger = logger;
         }
 
-        public async Task HandleEquation(Coefficients coefficients, CancellationToken cancellationToken)
+        public async Task<EquationRoots> HandleEquation(Coefficients coefficients, CancellationToken cancellationToken)
         {
             EquationRoots equationRoots =
                 await mCache.GetRootsIfExist(coefficients.GetCoefficientSignature(), cancellationToken).ConfigureAwait(false);
 
-            if (equationRoots == null)
-            {
-                equationRoots = mSolver.Solve(coefficients);
-                await mCache.SaveResult(coefficients.GetCoefficientSignature(), equationRoots, cancellationToken)
-                    .ConfigureAwait(false);
+            if (equationRoots != null)
+                return equationRoots;
 
-                return;
-            }
+            equationRoots = mSolver.Solve(coefficients);
+            await mCache.SaveResult(coefficients.GetCoefficientSignature(), equationRoots, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
+            return equationRoots;
+        }
+
+        public Task SendMessage(EquationRoots equationRootsMessage)
+        {
+            string serializedString = JsonSerializer.Serialize(equationRootsMessage);
+            mLogger.LogInformation($"Sending message: {serializedString}");
+
+            return Task.CompletedTask;
         }
     }
 }

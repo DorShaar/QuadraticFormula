@@ -1,5 +1,6 @@
 ﻿using EquationSolver.Domain;
 using Microsoft.Extensions.Logging;
+using Polly;
 using StackExchange.Redis;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -13,6 +14,10 @@ namespace EquationSolver.Infra
     public class RedisCache : IDisposable, IAsyncDisposable
     {
         private bool mIsDisposed;
+
+        private readonly TimeSpan mTTL = TimeSpan.FromMinutes(3);
+        private readonly int mMaxRetries = 3;
+
         private readonly ILogger<RedisCache> mlogger;
         private readonly ConnectionMultiplexer mMultiplexer = ConnectionMultiplexer.Connect("localhost,allowAdmin=true");
 
@@ -26,7 +31,7 @@ namespace EquationSolver.Infra
             mlogger.LogDebug($"Searching if there is an existing result for {key}");
             IDatabase db = mMultiplexer.GetDatabase();
 
-            byte[] deserializedEquationRoots = await db.StringGetAsync(key).ConfigureAwait(false);
+            byte[] deserializedEquationRoots = await OperateWithRetry(() => db.StringGetAsync(key)).ConfigureAwait(false);
 
             if (deserializedEquationRoots == null)
             {
@@ -39,18 +44,36 @@ namespace EquationSolver.Infra
             return equationRoots;
         }
 
-        public async Task SaveResult(string key, EquationRoots equationRoots, CancellationToken cancellationToken)
+        public async Task SaveResult(string key, EquationRoots equationRoots,
+            TimeSpan timeSpan = default, CancellationToken cancellationToken = default)
         {
             mlogger.LogDebug($"Saving value {equationRoots} with key {key}");
             IDatabase db = mMultiplexer.GetDatabase();
 
             byte[] serializedEquationRoots = Serialize(equationRoots);
 
-            // TODO polly
-            bool wasSet = await db.StringSetAsync(key, serializedEquationRoots, TimeSpan.FromSeconds(60)).ConfigureAwait(false);
+            TimeSpan ttl = timeSpan == default ? mTTL : timeSpan;
+
+            bool wasSet = await OperateWithRetry(() => db.StringSetAsync(key, serializedEquationRoots, ttl)).ConfigureAwait(false);
 
             if (!wasSet)
                 mlogger.LogError($"Could not set value {equationRoots} with key {equationRoots}");
+        }
+
+        private async Task<T> OperateWithRetry<T>(Func<Task<T>> redisOperation)
+        {
+            int retryAttempt = 1;
+
+            return await Policy.Handle<Exception>()
+                .WaitAndRetry(mMaxRetries, retryAttempt => TimeSpan.FromMilliseconds(200 * retryAttempt),
+                    (_, _) =>
+                    {
+                        mlogger.LogWarning($"Could not execute redis operation, attempt: {retryAttempt} out of {mMaxRetries}");
+                        ++retryAttempt;
+                    }
+                )
+                .Execute(async () => await redisOperation().ConfigureAwait(false))
+                .ConfigureAwait(false);
         }
 
         public void Flush(string dbName)
@@ -58,36 +81,6 @@ namespace EquationSolver.Infra
             IServer server = mMultiplexer.GetServer(dbName);
             server.FlushDatabase();
         }
-
-        // TODO use + write using polly.
-        //private static void HandleRedisConnectionError(RedisConnectionException ex)
-        //{
-        //    if (attemptingToConnect) return;
-        //    try
-        //    {
-        //        Policy
-        //            .Handle<Exception>()
-        //            .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-        //                (exception, timeSpan) =>
-        //                {
-        //                    Debug.WriteLine("Redis retry attempt" + exception.Message);
-        //                }
-        //            )
-        //            .Execute(() =>
-        //            {
-        //                attemptingToConnect = true;
-        //                RedisConnection.Reconnect();
-        //            });
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        attemptingToConnect = false;
-        //    }
-        //}
 
         private static byte[] Serialize(EquationRoots objectToSerialize)
         {

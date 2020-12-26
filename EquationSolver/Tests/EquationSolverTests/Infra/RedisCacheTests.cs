@@ -27,7 +27,8 @@ namespace EquationSolverTests.Infra
 
             equationRoots = new EquationRoots(coefficients, root1, root2);
 
-            await mRedisCache.SaveResult(coefficients.GetCoefficientSignature(), equationRoots, CancellationToken.None)
+            await mRedisCache.SaveResult(
+                coefficients.GetCoefficientSignature(), equationRoots, TimeSpan.FromSeconds(2), CancellationToken.None)
                .ConfigureAwait(false);
 
             equationRoots =
@@ -39,7 +40,7 @@ namespace EquationSolverTests.Infra
 
         public void Dispose()
         {
-            mRedisCache.Flush("localhost");
+            mRedisCache.Dispose();
         }
     }
 }
