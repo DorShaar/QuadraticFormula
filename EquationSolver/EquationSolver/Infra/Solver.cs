@@ -36,8 +36,8 @@ namespace EquationSolver.Infra
                 return EquationRoots.NoResult(coefficients);
             }
 
-            double x1 = (-b + Math.Sqrt(delta)) / 2 * a;
-            double x2 = (-b + Math.Sqrt(delta)) / 2 * a;
+            double x1 = (-b + Math.Sqrt(delta)) / (2 * a);
+            double x2 = (-b - Math.Sqrt(delta)) / (2 * a);
 
             return new EquationRoots(coefficients, x1, x2);
         }

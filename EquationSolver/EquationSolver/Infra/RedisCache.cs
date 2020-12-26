@@ -14,7 +14,7 @@ namespace EquationSolver.Infra
     {
         private bool mIsDisposed;
         private readonly ILogger<RedisCache> mlogger;
-        private readonly ConnectionMultiplexer mMultiplexer = ConnectionMultiplexer.Connect("localhost");
+        private readonly ConnectionMultiplexer mMultiplexer = ConnectionMultiplexer.Connect("localhost,allowAdmin=true");
 
         public RedisCache([NotNull] ILogger<RedisCache> logger)
         {
@@ -51,6 +51,12 @@ namespace EquationSolver.Infra
 
             if (!wasSet)
                 mlogger.LogError($"Could not set value {equationRoots} with key {equationRoots}");
+        }
+
+        public void Flush(string dbName)
+        {
+            IServer server = mMultiplexer.GetServer(dbName);
+            server.FlushDatabase();
         }
 
         // TODO use + write using polly.
