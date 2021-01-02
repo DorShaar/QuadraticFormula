@@ -49,7 +49,10 @@ C#:
   V 6. Use Polly (write it in the readme).
   
 Go:
-	1. 
+  V 1. UTs.
+  V 2. Print to CSV.
+    3. Add time measurement.
+    4. Use logger.
 
 General:
 Scan all repos and mark time wasting methods, and measure them, also should write them in report.
