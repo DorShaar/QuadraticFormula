@@ -11,7 +11,8 @@ of the calculations.
 5. Benchmarks. I am going to measure myself in each of the parts of that application. That way
 I can observe how each of improvement is making a difference.
 6. Each component will have UTs, in case UT will fail, build (of the component) will fail.
-7. E2E test - Be able to understand if full cycle is broken or not.
+7. Versioning - preactice versioning of each service and the whole application versioning.
+8. E2E test - Be able to understand if full cycle is broken or not.
 
 
 1. Create main flow of the application.

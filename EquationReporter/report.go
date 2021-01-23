@@ -16,45 +16,66 @@ type Report struct {
 }
 
 // WriteAllToCSV Writes report into given csvPath.
-func (report Report) WriteAllToCSV(csvPath string) {
+func (report Report) WriteAllToCSV(csvPath string, headers []string) {
 	records := [][]string{
-		{"correlation ID", "original equation", "organized equation", "a", "b", "c", "root1", "root2", "methods"},
+		headers,
 	}
 
 	for _, message := range report.equationMessages {
-		row := make([]string, 9)
+		rows := make([]string, len(records[0]))
 
-		row[0] = message.correlationID
-		row[1] = message.originalEquation
-		row[2] = message.organizedEquation
-		row[3] = strconv.FormatInt(int64(message.a), 10)
-		row[4] = strconv.FormatInt(int64(message.b), 10)
-		row[5] = strconv.FormatInt(int64(message.c), 10)
-		row[6] = strconv.FormatFloat(float64(message.root1), 'f', -1, 64)
+		setCsvRows(rows, message)
 
-		if message.root1 != message.root2 {
-			row[7] = strconv.FormatFloat(float64(message.root2), 'f', -1, 64)
-		}
+		records = append(records, rows)
 
-		row[8] = " "
+		writeToCsv(csvPath, records)
+	}
+}
 
-		records = append(records, row)
+func setCsvRows(rows []string, message EquationMessage) {
+	i := 0
+	rows[i] = message.correlationID
+	i++
+	rows[i] = message.originalEquation
+	i++
+	rows[i] = message.organizedEquation
+	i++
+	rows[i] = strconv.FormatInt(int64(message.a), 10)
+	i++
+	rows[i] = strconv.FormatInt(int64(message.b), 10)
+	i++
+	rows[i] = strconv.FormatInt(int64(message.c), 10)
+	i++
+	rows[i] = strconv.FormatFloat(float64(message.root1), 'f', -1, 64)
+	i++
 
-		csvFile, err := os.Create(csvPath)
-		defer csvFile.Close()
+	if message.root1 != message.root2 {
+		rows[i] = strconv.FormatFloat(float64(message.root2), 'f', -1, 64)
+	}
 
+	i++
+
+	for _, tracedMethod := range message.tracedMethodsList {
+		rows[i] = strconv.FormatInt(int64(tracedMethod.duration), 10)
+		i++
+	}
+}
+
+func writeToCsv(csvPath string, records [][]string) {
+	csvFile, err := os.Create(csvPath)
+	defer csvFile.Close()
+
+	if err != nil {
+		log.Fatalln("failed to open file", err)
+	}
+
+	csvWriter := csv.NewWriter(csvFile)
+	defer csvWriter.Flush()
+
+	for _, record := range records {
+		err := csvWriter.Write(record)
 		if err != nil {
-			log.Fatalln("failed to open file", err)
-		}
-
-		csvWriter := csv.NewWriter(csvFile)
-		defer csvWriter.Flush()
-
-		for _, record := range records {
-			err := csvWriter.Write(record)
-			if err != nil {
-				log.Fatalln("error writing record to file", err)
-			}
+			log.Fatalln("error writing record to file", err)
 		}
 	}
 }
