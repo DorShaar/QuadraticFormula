@@ -370,3 +370,7 @@ MigrationBackup/
 # Maven
 log/
 target/
+
+#golang packages
+github.com/
+pkg/
