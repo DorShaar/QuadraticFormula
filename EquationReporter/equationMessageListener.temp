@@ -1,0 +1,27 @@
+// package equationreporter
+
+// import (
+// 	"net/http"
+// )
+
+// type HttpHandler struct{}
+
+// // type EquationMessageListener struct {
+// // 	report      Report
+// // 	httpHandler HttpHandler
+// // }
+
+// // Implement `ServeHTTP` method on `HttpHandler` struct
+// func (h HttpHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+// 	data := []byte("Hello World!") // slice of bytes
+// 	res.Write(data)
+// }
+
+// // func (report *Report, httpHandler *HttpHandler) StartListen() {
+// func (httpHandler *HttpHandler) StartListen() {
+// 	// report.startTime = time.Now()
+
+// 	handler := HttpHandler{}
+
+// 	http.ListenAndServe(":9000", handler)
+// }
