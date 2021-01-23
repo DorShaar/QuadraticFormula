@@ -29,19 +29,19 @@ Python:
 	
 Java:
   V 1. Use Class Injection (used Spring beans).
-    2. Send message to the next application from the Java application.
+    2. Send message to the next application from the Java application (Create http server and client).
   V 3. UTs.
   V 4. Use logger.
   V 5. Add time measurement.
     6. Reduce calcualtion time from CreateNumberFromCharactersGroup method.
-    7. Create http server.
+    8. Versioning.
 
 Javascript:
     1. Send message to the next application from the Javascript application.
   V 2. UTs.
   V 3. Use logger.
   V 4. Add time measurement.
-  	5. Create http server.
+    5. Create http server.
 
 C#:
     1. Send message to the next application from the C# application.
@@ -50,7 +50,7 @@ C#:
   V 4. Add time measurement.
   V 5. Use redis (write it in the readme).
   V 6. Use Polly (write it in the readme).
-  	7. Create http server.
+    7. Create http server.
   
 Go:
   V 1. UTs.
