@@ -35,7 +35,13 @@ func (queueWriter *QueueWriter) SendEquetion(queueName string, equations string)
 		log.Panic("Could not send to queue since queue writer is not connected")
 	}
 
-	queueWriter.connection.Send(queueName, contentType, []byte(equations), nil)
+	err := queueWriter.connection.Send(queueName, contentType, []byte(equations))
+
+	if err != nil {
+		log.Printf("Could not send message to queue %s", queueName)
+		return
+	}
+
 	log.Printf("Send message '%s' to queue '%s'", equations, queueName)
 }
 

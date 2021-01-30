@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+const connectionAddress = "localhost:61613"
+
 func main() {
 	f, err := os.OpenFile("EquationReader/equation_reader.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
@@ -33,7 +35,7 @@ func sendEquations(equations []string) {
 	queueName := "equation-arranger"
 	queueWriter := equationreader.QueueWriter{}
 
-	queueWriter.Connect("localhost:61613")
+	queueWriter.Connect(connectionAddress)
 
 	for _, equation := range equations {
 		queueWriter.SendEquetion(queueName, equation)

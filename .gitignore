@@ -374,3 +374,7 @@ target/
 #golang packages
 github.com/
 pkg/
+/src/*.exe
+
+#Visual Studio Code
+__debug_bin
