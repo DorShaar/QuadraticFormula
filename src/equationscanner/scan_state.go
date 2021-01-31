@@ -3,7 +3,7 @@ package equationscanner
 type ScanState int
 
 const (
-    DuringStart =      	iota
+    DuringStart ScanState =      	iota
     DuringNumber
     DuringVariable 
     DuringCoefficientSign
