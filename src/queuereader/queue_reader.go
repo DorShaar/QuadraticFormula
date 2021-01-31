@@ -1,4 +1,4 @@
-package equationreader
+package queuereader
 
 import (
 	"log"
@@ -10,8 +10,9 @@ const contentType = "text/plain"
 
 // QueueWriter connects and write messages to queue
 type QueueWriter struct {
-	isConnected bool
-	connection  *stomp.Conn
+	isConnected 	bool
+	connection  	*stomp.Conn
+	// subscription 	// TODO
 }
 
 // Connect Creates a connection to given address
@@ -29,13 +30,17 @@ func (queueWriter *QueueWriter) Connect(connectionAddress string) {
 	log.Printf("Connected to address: %s", connectionAddress)
 }
 
-// SendEquation sends given equation into given queueName
-func (queueWriter *QueueWriter) SendEquation(queueName string, equations string) {
+func // TODO suscription
+
+// ReadMessage reads message from given queueName
+func (queueWriter *QueueWriter) ReadMessage(queueName string) {
 	if !queueWriter.isConnected {
-		log.Panic("Could not send to queue since queue writer is not connected")
+		log.Panic("Could not read from queue since queue reader is not connected")
 	}
 
-	err := queueWriter.connection.Send(queueName, contentType, []byte(equations))
+	sub, _ := conn.Subscribe("queueName", stomp.AckAuto)
+ 
+  	msg := <- sub.C
 
 	if err != nil {
 		log.Printf("Could not send message to queue %s", queueName)
@@ -49,6 +54,8 @@ func (queueWriter *QueueWriter) SendEquation(queueName string, equations string)
 func (queueWriter *QueueWriter) Disconnect() {
 	queueWriter.isConnected = false
 	queueWriter.connection.Disconnect()
+
+	// tODO maybe unsubscribe
 
 	log.Printf("Disconnected")
 }

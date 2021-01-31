@@ -38,7 +38,7 @@ func sendEquations(equations []string) {
 	queueWriter.Connect(connectionAddress)
 
 	for _, equation := range equations {
-		queueWriter.SendEquetion(queueName, equation)
+		queueWriter.SendEquation(queueName, equation)
 	}
 
 	queueWriter.Disconnect()
