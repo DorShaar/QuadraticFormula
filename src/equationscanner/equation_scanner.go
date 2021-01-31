@@ -3,6 +3,8 @@ package equationscanner
 import (
 	"log"
 	"unicode"
+    "errors"
+    "fmt"
 )
 
 // EquationScanner scans given equation string and hold the equation's parameters.
@@ -22,10 +24,18 @@ type EquationScanner struct {
 }
 
 // Connect Creates a connection to given address
-func (equationScanner *EquationScanner) Scan(equation string) {
+func (equationScanner *EquationScanner) Scan(equation string) (err error) {
+    defer func() {
+        if r := recover(); r != nil {
+            err = errors.New(fmt.Sprintf("Error while scanning equation %s", equation))
+        }
+    }()
+
 	initializeScanner(equationScanner)
     collectCoefficients(equationScanner, equation)
     end(equationScanner)
+
+    return
 }
 
 func initializeScanner(equationScanner *EquationScanner) {

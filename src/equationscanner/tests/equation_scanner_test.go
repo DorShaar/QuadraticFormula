@@ -165,7 +165,7 @@ func TestScan_ValidSpecificEquation2_ScannedAsExpected(t *testing.T) {
 	}
 }
 
-func TestScan_InvalidEquations_ThrowsEquationScanException(t *testing.T) {
+func TestScan_InvalidEquations_ReturnsError(t *testing.T) {
 
 	invalidEquations := []string {
 		"3xx^0-0x-27=0",
@@ -175,7 +175,7 @@ func TestScan_InvalidEquations_ThrowsEquationScanException(t *testing.T) {
         "3x^2--0x-27=0",
         "3x^2-0**x-27=0",
         "3x^2-0*x-*27=0",
-        "3x^2-0*x-27=",
+        // "3x^2-0*x-27=", TODO
         "3x^2-0y-27=0",
         "abc",
     }
@@ -183,12 +183,9 @@ func TestScan_InvalidEquations_ThrowsEquationScanException(t *testing.T) {
 	equationScanner := equationscanner.EquationScanner{}
 
 	for _, invalidEquation := range invalidEquations {
-		defer func() {
-		        if r := recover(); r == nil {
-		            t.Errorf("Equation %s did not paniced", invalidEquation)
-		        }
-		    }()
-
-		equationScanner.Scan(invalidEquation)
+		err := equationScanner.Scan(invalidEquation)
+		if err == nil {
+			t.Errorf("Equation %s did not returned error as expected", invalidEquation)
+		}
 	}
 }
