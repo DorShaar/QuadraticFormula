@@ -1,4 +1,4 @@
-package queuereader
+package equationqueue
 
 import (
 	"log"
@@ -6,13 +6,10 @@ import (
 	"github.com/jjeffery/stomp"
 )
 
-const contentType = "text/plain"
-
 // QueueWriter connects and write messages to queue
 type QueueWriter struct {
-	isConnected 	bool
-	connection  	*stomp.Conn
-	// subscription 	// TODO
+	isConnected bool
+	connection  *stomp.Conn
 }
 
 // Connect Creates a connection to given address
@@ -30,17 +27,13 @@ func (queueWriter *QueueWriter) Connect(connectionAddress string) {
 	log.Printf("Connected to address: %s", connectionAddress)
 }
 
-func // TODO suscription
-
-// ReadMessage reads message from given queueName
-func (queueWriter *QueueWriter) ReadMessage(queueName string) {
+// SendMessage sends given equation into given queueName
+func (queueWriter *QueueWriter) SendMessage(queueName string, equations string) {
 	if !queueWriter.isConnected {
-		log.Panic("Could not read from queue since queue reader is not connected")
+		log.Panic("Could not send to queue since queue writer is not connected")
 	}
 
-	sub, _ := conn.Subscribe("queueName", stomp.AckAuto)
- 
-  	msg := <- sub.C
+	err := queueWriter.connection.Send(queueName, contentType, []byte(equations))
 
 	if err != nil {
 		log.Printf("Could not send message to queue %s", queueName)
@@ -54,8 +47,6 @@ func (queueWriter *QueueWriter) ReadMessage(queueName string) {
 func (queueWriter *QueueWriter) Disconnect() {
 	queueWriter.isConnected = false
 	queueWriter.connection.Disconnect()
-
-	// tODO maybe unsubscribe
 
 	log.Printf("Disconnected")
 }
