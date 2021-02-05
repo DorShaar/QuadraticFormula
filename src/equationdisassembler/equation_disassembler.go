@@ -1,66 +1,129 @@
 package equationdisassembler
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"strings"
-	"errors"
 	"unicode"
+	"unicode/utf8"
 )
 
 const secondDegreeSize = 3 // size of "x^2"
+const firstDegreeSize = 1 // size of "x"
 
-// ReadCsv reads from csv path.
-func Disassamble(equation string, variable string) DisassembledEquationMessage {
-    log.Printf("Start disassemble equation %s", equation)
 
-    a, secondDegreeIndex, err := findA(equation, variable)
+func Disassemble(equation string, variable string) DisassembledEquationMessage {
+	log.Printf("Start disassemble equation %s", equation)
+
+	a, secondDegreeIndex, err := findA(equation, variable)
+
+	if err != nil {
+		log.Print(err)
+		return DisassembledEquationMessage { IsDisassembleFailed: true }
+	}
+
+	b, firstDegreeIndex, err := findB(equation, variable, secondDegreeIndex + secondDegreeSize)
+
+	if err != nil {
+		log.Print(err)
+		return DisassembledEquationMessage { IsDisassembleFailed: true }
+	}
+
+    c, err := findC(equation, firstDegreeIndex + firstDegreeSize)
 
     if err != nil {
 		log.Print(err)
-    }
+		return DisassembledEquationMessage { IsDisassembleFailed: true }
+	}
 
-    secondDegreeIndex += secondDegreeSize 
-
-    // var bResult = findB(equation, variable, aResult.secondDegreeIndex);
-    // bResult.firstDegreeIndex += 1; // + size of "x";
-
-    // const c = findC(equation, bResult.firstDegreeIndex);
-
-    // const endTime = Date.now();
-
-    // logger.log("info", "The coefficients of " + equation + " are: " + aResult.a + ", " + bResult.b + ", " + c);
-    // return new DisassembledEquationMessage(equation, aResult.a, bResult.b, c, startTime, endTime);
+    log.Printf("The coefficients of %s are: %s, %s, %s", equation, a, b, c)
+	return DisassembledEquationMessage { 
+        Equation: equation,
+        A: a,
+        B: b,
+        C: c,
+    };
 }
 
-func findA(equation string, variable string) (int, int, error) {
-    secondDegreeVariable := variable + "^2"
-    secondDegreeIndex := strings.Index(equation, secondDegreeVariable)
+func findA(equation string, variable string) (string, int, error) {
+	secondDegreeVariable := variable + "^2"
+	secondDegreeIndex := strings.Index(equation, secondDegreeVariable)
 
-    if secondDegreeIndex <= -1 {
-    	errorMessage := fmt.Sprintf("Could not find second degree variable for equation %s", equation)
-        return -1, -1, errors.New(errorMessage)
+	if secondDegreeIndex <= -1 {
+		errorMessage := fmt.Sprintf("Could not find second degree variable for equation %s", equation)
+		return "", -1, errors.New(errorMessage)
+	}
+
+	log.Printf("Index of %s: %d", secondDegreeVariable, secondDegreeIndex)
+
+	a := "1"
+	if secondDegreeIndex != 0 {
+		a = equation[0:secondDegreeIndex]
+
+		if a[0] == '+' {
+			a = a[1:]
+		} else if a[0] != '-' {
+			aRune, _ := utf8.DecodeRuneInString(a)
+			if !unicode.IsDigit(aRune) {
+				return "", -1, errors.New("Expecting '+' or '-' signs only")
+			}
+		}
+
+		if a == "-" {
+			a = "-1"
+		}
+	}
+
+	log.Printf("Found A: %s", a)
+
+	return a, secondDegreeIndex, nil
+}
+
+func findB(equation string, variable string, secondDegreeEndIndex int) (string, int, error) {
+	equationAfterSecondDegree := equation[secondDegreeEndIndex:]
+
+	firstDegreeIndex := strings.Index(equationAfterSecondDegree, variable)
+
+	if firstDegreeIndex <= -1 {
+		errorMessage := fmt.Sprintf("Could not find first degree variable for equation %s", equation)
+		return "", -1, errors.New(errorMessage)
+	}
+
+	b := equationAfterSecondDegree[:firstDegreeIndex]
+
+	if b[0] == '+' {
+        b = b[1:]
+	} else if b[0] != '-' {
+		errorMessage := fmt.Sprintf("Expecting '+' or '-' signs only")
+		return "", -1, errors.New(errorMessage)
+	}
+
+    if len(b) == 0 {
+        b = "1"
     }
 
-    log.Printf("Index of %s: %d", secondDegreeVariable, secondDegreeIndex)
+    firstDegreeIndex += secondDegreeEndIndex
+	log.Printf("Index of %s: %d", variable, firstDegreeIndex)
+    log.Printf("Found B: %s", b)
 
-    a := "1";
-    if secondDegreeIndex != 0 {
-		runes := []rune(equation)
-	    runes = runes[0:secondDegreeIndex])
+    return b, firstDegreeIndex, nil
+}
 
-        if runes[0] == '+' {
-            a = runes[1:]
-        }
-        else if a[0] != '-' && !unicode.IsDigit(a[0]) {
-        	return -1, -1, errors.New("Expecting '+' or '-' signs only")
-        }
+func findC(equation string, firstDegreeEndIndex int) (string, error) {
+	equalSignIndex := strings.Index(equation, "=")
 
-        if (a == "-")
-            a = "-1"
+    if equalSignIndex == -1 {
+    	errorMessage := fmt.Sprintf("Could not find equal sign")
+		return "", errors.New(errorMessage)
     }
 
-    log.Printf("Found A: %d", a)
+    c := equation[firstDegreeEndIndex:equalSignIndex]
 
-    return a, secondDegreeIndex, nil
+    if c[0] == '+' {
+        c = c[1:]
+    }
+
+   	log.Printf("Found C: %s", c)
+    return c, nil;
 }

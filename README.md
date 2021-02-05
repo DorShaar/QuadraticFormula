@@ -9,3 +9,7 @@ Golang:
 	Logging
 	Using interfaces
 	Error handling (using panic and recover, returning errors)
+
+
+
+To be able and run with each of the services, we should run "bin\activemq start"

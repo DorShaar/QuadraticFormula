@@ -9,8 +9,8 @@ import (
 )
 
 const connectionAddress = "localhost:61613"
-const subscriptionQueue = "equation-arranger"
-const publishQueueName = "equation-disassembler"
+const equationArrangerQueueName = "equation-arranger"
+const equationDisassemblerQueueName = "equation-disassembler"
 
 func main() {
 	f, err := os.OpenFile("equationarranger/equation_arranger.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
@@ -22,7 +22,7 @@ func main() {
 
 	log.SetOutput(f)
 
-	log.Println("Equation Reader is running")
+	log.Println("Equation Arranger is running")
 
 	arrangeEquations()
 }
@@ -30,7 +30,7 @@ func main() {
 func arrangeEquations() {
 	queueReader := equationqueue.QueueReader{}
 	queueReader.Connect(connectionAddress)
-	queueReader.Subscribe(subscriptionQueue)
+	queueReader.Subscribe(equationArrangerQueueName)
 
 	queueWriter := equationqueue.QueueWriter{}
 	queueWriter.Connect(connectionAddress)
@@ -43,7 +43,7 @@ func arrangeEquations() {
 		arrangeResult := equationArranger.Arrange(equation)
 
 		if arrangeResult.IsArrangeSucceeded() {
-			queueWriter.SendMessage(publishQueueName, arrangeResult.ArrangedEquation())
+			queueWriter.SendMessage(equationDisassemblerQueueName, arrangeResult.ArrangedEquation())
 		}
 	}
 }
