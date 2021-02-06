@@ -3,6 +3,7 @@ package main
 import (
 	"equationdisassembler"
 	"equationqueue"
+	"equationmessage"
 	"log"
 	"os"
 )
@@ -35,11 +36,26 @@ func disassembleEquations() {
 	queueWriter.Connect(connectionAddress)
 
 	for true {
-		message := queueReader.ReadMessage()
-		disassembleResult := equationdisassembler.Disassemble(message, message) // TODO
+		equationMessage, err := queueReader.ReadMessage()
+
+		if err != nil {
+			log.Println("Error when trying to read message")
+			continue
+		}
+
+		disassembleResult := equationdisassembler.Disassemble(equationMessage.ArrangedEquation, "x")
 
 		if !disassembleResult.IsDisassembleFailed {
-			queueWriter.SendMessage(equationSolverQueueName, message)
+			equationMessage = &equationmessage.EquationMessage { 
+				CorrelationId: equationMessage.CorrelationId,
+				OriginalEquation: equationMessage.OriginalEquation,
+				ArrangedEquation: equationMessage.ArrangedEquation,
+				A: disassembleResult.A,
+				B: disassembleResult.B,
+				C: disassembleResult.C,
+			}
+
+			queueWriter.SendMessage(equationMessage, equationSolverQueueName)
 		}
 	}
 }

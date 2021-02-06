@@ -3,8 +3,10 @@ package main
 import (
 	"equationreader"
 	"equationqueue"
+	"equationmessage"
 	"log"
 	"os"
+	"github.com/google/uuid"
 )
 
 const connectionAddress = "localhost:61613"
@@ -40,7 +42,12 @@ func sendEquations(equations []string) {
 	queueWriter.Connect(connectionAddress)
 
 	for _, equation := range equations {
-		queueWriter.SendMessage(equationArrangerQueueName, equation)
+		equationMessage := &equationmessage.EquationMessage { 
+				CorrelationId: uuid.New().String(),
+				OriginalEquation: equation,
+			}
+
+		queueWriter.SendMessage(equationMessage, equationArrangerQueueName)
 	}
 
 	queueWriter.Disconnect()

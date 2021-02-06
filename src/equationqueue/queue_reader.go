@@ -2,8 +2,8 @@ package equationqueue
 
 import (
 	"log"
-
 	"github.com/jjeffery/stomp"
+	"equationmessage"
 )
 
 // QueueReader connects and subscribe to a given channel
@@ -47,14 +47,21 @@ func (queueReader *QueueReader) Subscribe(queueName string) {
 	log.Printf("Subscribe to queue %s", queueName)
 }
 
-func (queueReader *QueueReader) ReadMessage() string {
+func (queueReader *QueueReader) ReadMessage() (*equationmessage.EquationMessage, error) {
 	if !queueReader.isConnected {
 		log.Panic("Could not read from queue since queue reader is not connected")
 	}
 
-  	msg := <- queueReader.subscription.C
+  	message := <- queueReader.subscription.C
+  	messageString := string(message.Body)
 
-  	return string(msg.Body)
+  	deserializedEquationMessage, err := equationmessage.DeserializeFromJson(messageString)
+
+  	if err != nil {
+		return nil, err
+	}
+
+  	return deserializedEquationMessage, nil
 }
 
 // Disconnect sends given equation into given queueName

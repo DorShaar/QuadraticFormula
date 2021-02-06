@@ -6,6 +6,7 @@ import (
 	"equationarranger"
 	"equationscanner"
 	"equationqueue"
+	"equationmessage"
 )
 
 const connectionAddress = "localhost:61613"
@@ -39,11 +40,23 @@ func arrangeEquations() {
 	equationArranger := equationarranger.EquationArranger{EquationScanner: equationScanner}
 
 	for true {
-		equation := queueReader.ReadMessage()
-		arrangeResult := equationArranger.Arrange(equation)
+		equationMessage, err := queueReader.ReadMessage()
+
+		if err != nil {
+			log.Println("Error when trying to read message")
+			continue
+		}
+
+		arrangeResult := equationArranger.Arrange(equationMessage.OriginalEquation)
 
 		if arrangeResult.IsArrangeSucceeded() {
-			queueWriter.SendMessage(equationDisassemblerQueueName, arrangeResult.ArrangedEquation())
+			equationMessage = &equationmessage.EquationMessage { 
+				CorrelationId: equationMessage.CorrelationId,
+				OriginalEquation: equationMessage.OriginalEquation,
+				ArrangedEquation: arrangeResult.ArrangedEquation(),
+			}
+
+			queueWriter.SendMessage(equationMessage, equationDisassemblerQueueName)
 		}
 	}
 }
