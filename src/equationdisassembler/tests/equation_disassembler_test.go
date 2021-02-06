@@ -18,7 +18,7 @@ func TestDisassamble_Valid_Equations_As_Expected(t *testing.T) {
 	for _, testSource := range testSources {
 		equation := testSource[0]
 		variable := testSource[1]
-		disassembleMessage := equationdisassembler.Disassamble(equation, variable)
+		disassembleMessage := equationdisassembler.Disassemble(equation, variable)
 
 		if  testSource[2] != disassembleMessage.A {
 			t.FailNow()
@@ -49,7 +49,7 @@ func TestSDisassamble_Invalid_Equations_Returns_Failure(t *testing.T) {
 	for _, testSource := range testSources {
 		equation := testSource[0]
 		variable := testSource[1]
-		disassembleMessage := equationdisassembler.Disassamble(equation, variable)
+		disassembleMessage := equationdisassembler.Disassemble(equation, variable)
 
 		if  !disassembleMessage.IsDisassembleFailed {
 			t.FailNow()

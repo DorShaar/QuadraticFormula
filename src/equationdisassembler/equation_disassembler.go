@@ -12,7 +12,6 @@ import (
 const secondDegreeSize = 3 // size of "x^2"
 const firstDegreeSize = 1 // size of "x"
 
-
 func Disassemble(equation string, variable string) DisassembledEquationMessage {
 	log.Printf("Start disassemble equation %s", equation)
 
