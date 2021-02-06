@@ -13,7 +13,7 @@ const equationDisassemblerQueueName = "equation-disassembler"
 const equationSolverQueueName = "equation-solver"
 
 func main() {
-	f, err := os.OpenFile("equationarranger/equation_arranger.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	f, err := os.OpenFile("equationdisassembler/equation_disassembler.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}

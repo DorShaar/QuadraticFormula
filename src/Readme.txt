@@ -3,7 +3,8 @@ To make golang application compile
     Your go files should be under $GOLANG/src/<golang files and packages>
 
 2.  go get "github.com/jjeffery/stomp"
-2.  go get "github.com/google/uuid"
+3.  go get "github.com/google/uuid"
+4.  go get "github.com/gomodule/redigo/redis"
 
 To make golang application be built via command line:
 go build <main_go_file_name>.

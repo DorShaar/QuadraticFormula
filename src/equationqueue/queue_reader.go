@@ -64,7 +64,7 @@ func (queueReader *QueueReader) ReadMessage() (*equationmessage.EquationMessage,
   	return deserializedEquationMessage, nil
 }
 
-// Disconnect sends given equation into given queueName
+// Disconnect closes that connection
 func (queueReader *QueueReader) Disconnect() {
 
 	queueReader.subscription.Unsubscribe()

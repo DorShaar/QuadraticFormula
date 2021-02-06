@@ -378,3 +378,6 @@ pkg/
 
 #Visual Studio Code
 __debug_bin
+
+#redis
+*.rdb

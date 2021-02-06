@@ -51,7 +51,7 @@ func (queueWriter *QueueWriter) SendMessage(equationMessage *equationmessage.Equ
 	return nil
 }
 
-// Disconnect sends given equation into given queueName
+// Disconnect closes that connection
 func (queueWriter *QueueWriter) Disconnect() {
 	queueWriter.isConnected = false
 	queueWriter.connection.Disconnect()
