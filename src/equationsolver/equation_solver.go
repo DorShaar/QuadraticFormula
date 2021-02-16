@@ -5,8 +5,8 @@ import (
 	"math"
 )
 
-// FindRoots get 3 coefficients of quadratic equation, a,b,c, and return the two root and bool if they were found.
-func FindRoots(a int, b int, c int) (float64, float64, bool) {
+// CalculateRoots get 3 coefficients of quadratic equation, a,b,c, and return the two root and bool if they were found.
+func CalculateRoots(a int, b int, c int) (float64, float64, bool) {
 	log.Printf("Calcualting roots for coefficient a: %d, b: %d, c: %d", a, b, c)
 
 	if a == 0 {

@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func TestFindRoots_EquationWithRoots_RootsAreCorrect(t *testing.T) {
+func TestCalcualteRoots_EquationWithRoots_RootsAreCorrect(t *testing.T) {
 
 	testSources := [][]string {
 		{"1", "-5", "6", "3", "2"},
@@ -20,7 +20,7 @@ func TestFindRoots_EquationWithRoots_RootsAreCorrect(t *testing.T) {
 		expectedRoot1, _ := strconv.ParseFloat(testSource[3], 32)
 		expectedRoot2, _ := strconv.ParseFloat(testSource[4], 32)
 		
-		root1, root2, hasRoots := equationsolver.FindRoots(a, b, c)
+		root1, root2, hasRoots := equationsolver.CalculateRoots(a, b, c)
 
 		if !hasRoots {
 			t.FailNow()
@@ -48,7 +48,7 @@ func TestFindRoots_EquationWithOneRoot_RootIsCorrect(t *testing.T) {
 		c, _ := strconv.Atoi(testSource[2])
 		expectedRoot1, _ := strconv.ParseFloat(testSource[3], 32)
 		
-		root1, root2, hasRoots := equationsolver.FindRoots(a, b, c)
+		root1, root2, hasRoots := equationsolver.CalculateRoots(a, b, c)
 
 		if !hasRoots {
 			t.FailNow()
@@ -75,7 +75,7 @@ func TestFindRoots_EquationWithoutRoots_ReturnsNoResult(t *testing.T) {
 		b, _ := strconv.Atoi(testSource[1])
 		c, _ := strconv.Atoi(testSource[2])
 		
-		_, _, hasRoots := equationsolver.FindRoots(a, b, c)
+		_, _, hasRoots := equationsolver.CalculateRoots(a, b, c)
 
 		if hasRoots {
 			t.FailNow()
@@ -94,7 +94,7 @@ func TestFindRoots_EquationWithZeroACoefficientOneRoot_ReturnsNoResult(t *testin
 		b, _ := strconv.Atoi(testSource[1])
 		c, _ := strconv.Atoi(testSource[2])
 		
-		_, _, hasRoots := equationsolver.FindRoots(a, b, c)
+		_, _, hasRoots := equationsolver.CalculateRoots(a, b, c)
 
 		if hasRoots {
 			t.FailNow()
