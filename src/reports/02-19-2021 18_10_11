@@ -1,0 +1,4 @@
+Correlation Id,Original equation,Arranged equation,A,B,C,Root1,Root2
+8712521d-b6e4-49a6-aa41-8c561b07a13c,x^2+3x+1 = 0,x^2+3x+1=0,1,3,1,-0.38196602,-2.618034
+bcab583c-0b7b-4d68-bf81-57dbfdcc7664,x^2+1 = -3x,x^2+3x+1=0,1,3,1,-0.38196602,-2.618034
+babe2b6d-4b6e-4bdd-afb1-2661e05c5900,x^2+1x^2 -4x+ 7 = -3x,2x^2-1x+7=0,2,-1,7,0,

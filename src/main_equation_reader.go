@@ -11,6 +11,7 @@ import (
 
 const connectionAddress = "localhost:61613"
 const equationArrangerQueueName = "equation-arranger"
+const equationReporterQueueName = "equation-reporter"
 
 func main() {
 	f, err := os.OpenFile("equationreader/equation_reader.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
@@ -41,14 +42,25 @@ func sendEquations(equations []string) {
 
 	queueWriter.Connect(connectionAddress)
 
+	var lastCorrelationId string
 	for _, equation := range equations {
 		equationMessage := &equationmessage.EquationMessage { 
 				CorrelationId: uuid.New().String(),
 				OriginalEquation: equation,
 			}
 
+		lastCorrelationId = equationMessage.CorrelationId
+
 		queueWriter.SendMessage(equationMessage, equationArrangerQueueName)
 	}
+
+	equationMessage := &equationmessage.EquationMessage { 
+			CorrelationId: uuid.New().String(),
+			OriginalEquation: "end",
+			ArrangedEquation: lastCorrelationId,
+		}
+
+	queueWriter.SignalEnd(equationMessage, equationReporterQueueName)
 
 	queueWriter.Disconnect()
 }
