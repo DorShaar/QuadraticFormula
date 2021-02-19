@@ -44,7 +44,7 @@ func (queueReader *QueueReader) Subscribe(queueName string) {
 
 	queueReader.subscription = sub
 	queueReader.subscriptionQueueName = queueName
-	log.Printf("Subscribe to queue %s", queueName)
+	log.Printf("Subscribed to queue %s", queueName)
 }
 
 func (queueReader *QueueReader) ReadMessage() (*equationmessage.EquationMessage, error) {

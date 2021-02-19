@@ -37,4 +37,8 @@ echo "Building equation disassembler"
 go build main_equation_disassembler.go
 if %errorlevel% neq 0 exit /b %errorlevel%
 
+echo "Building equation solver"
+go build main_equation_solver.go
+if %errorlevel% neq 0 exit /b %errorlevel%
+
 echo "Done testing and building successfully"

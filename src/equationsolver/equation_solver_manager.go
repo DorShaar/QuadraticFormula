@@ -9,8 +9,8 @@ type EquationSolverManager struct {
 	cache		rediscache.RedisCache
 }
 
-func (equationSolverManager *EquationSolverManager) Init() {
-	// TODO
+func (equationSolverManager *EquationSolverManager) Init(redisConnectionAddress string) {
+	equationSolverManager.cache.Connect(redisConnectionAddress)
 }
 
 func (equationSolverManager *EquationSolverManager) FindRoots(a int, b int, c int) (float64, float64, bool) {
@@ -24,16 +24,10 @@ func (equationSolverManager *EquationSolverManager) FindRoots(a int, b int, c in
 
 	root1, root2, hasRoots := CalculateRoots(a, b, c)
 	if !hasRoots {
+		log.Printf("There are no roots for a %d b %d c %d", a, b, c)
 		return 0, 0, false
 	}
 
+	log.Printf("The roots a %d b %d c %d are: {%f, %f}", a, b, c, root1, root2)
 	return root1, root2, true
 }
-
-        // public Task SendMessage(EquationRoots equationRootsMessage)
-        // {
-        //     string serializedString = JsonSerializer.Serialize(equationRootsMessage);
-        //     mLogger.LogInformation($"Sending message: {serializedString}");
-
-        //     return Task.CompletedTask;
-        // }
