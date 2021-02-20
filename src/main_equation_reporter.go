@@ -37,6 +37,7 @@ func reportEquations() {
 	queueReader.Connect(queueConnectionAddress)
 	queueReader.Subscribe(equationReporterQueueName)
 
+	var lastCorrelationIdSignal string
 	var lastCorrelationId string
 
 	for true {
@@ -50,11 +51,15 @@ func reportEquations() {
 		isStopSignal := checkIfStopSignal(equationMessage)
 
 		if isStopSignal  {
-			lastCorrelationId = equationMessage.ArrangedEquation
+			lastCorrelationIdSignal = equationMessage.ArrangedEquation
+			log.Printf("Signaled with last correlation id %s", lastCorrelationIdSignal)
+		} else {
+			lastCorrelationId = equationMessage.CorrelationId
+			equationReporter.AddMessage(equationMessage)	
 		}
 
-		if !equationReporter.HasCorrelationId() {
-			equationReporter.AddMessage(equationMessage)	
+		if lastCorrelationIdSignal != "" && lastCorrelationIdSignal == lastCorrelationId {
+			break
 		}
 	}
 

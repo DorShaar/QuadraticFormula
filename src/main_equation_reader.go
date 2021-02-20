@@ -60,7 +60,8 @@ func sendEquations(equations []string) {
 			ArrangedEquation: lastCorrelationId,
 		}
 
-	queueWriter.SignalEnd(equationMessage, equationReporterQueueName)
+	queueWriter.SendMessage(equationMessage, equationReporterQueueName)
+	log.Printf("Sending end message - last correlation id is %s", lastCorrelationId)
 
 	queueWriter.Disconnect()
 }
