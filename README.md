@@ -12,5 +12,9 @@ Golang:
 
 Windows batch:
 	Cleaning, testing and building with stop on first error.
+	
+Had fun and tried to get familier with activemq.
+Had fun and tried to get familier with redis.
 
+Run notes:
 To be able and run with each of the services, we should run "bin\activemq start"
